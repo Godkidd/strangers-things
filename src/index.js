@@ -46,6 +46,9 @@ const App = ()=> {
     })
     .then(response => response.json())
     .then(result => {
+      if(!result.success){
+        throw result.error;
+      }
       const token = result.data.token;
       window.localStorage.setItem('token', token);
       fetch('https://strangers-things.herokuapp.com/api/2209-FTB-ET-WEB-AM/users/me', {
@@ -80,7 +83,11 @@ const App = ()=> {
     })
     .then(response => response.json())
     .then(result => {
-        console.log(result);
+      if(!result.success){
+        throw result.error;
+      }
+      console.log(result);
+
     })
     .catch( err => console.log(err));
   }
