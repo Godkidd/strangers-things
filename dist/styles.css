@@ -1,5 +1,42 @@
 body {
   font-family: verdana;
+  
+}
+
+#mainTitle {
+  font-size: 60px;
+  font-style: oblique;
+  color: rgb(53, 22, 83);
+  display: flex;
+  justify-content: center;
+}
+
+#credentials {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 4rem;
+}
+
+#create {
+  display: flex;
+  justify-content: center;
+}
+
+#searchBar{
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  padding-bottom: 2rem;
+}
+
+#search {
+  text-align: center;
+  
+}
+
+#sendMessage {
+  display: flex;
+  justify-content: center;
 }
 
 input, button {

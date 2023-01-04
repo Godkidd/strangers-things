@@ -1,18 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
 const Login = (props) => {
   const exchangeTokenForUser = props.exchangeTokenForUser;
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
 
   const login = (ev) => {
     ev.preventDefault();
     fetch(
-      'https://strangers-things.herokuapp.com/api/2209-FTB-ET-WEB-AM/users/login',
+      "https://strangers-things.herokuapp.com/api/2209-FTB-ET-WEB-AM/users/login",
       {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           user: {
@@ -28,14 +28,14 @@ const Login = (props) => {
           throw result.error;
         }
         const token = result.data.token;
-        window.localStorage.setItem('token', token);
+        window.localStorage.setItem("token", token);
         exchangeTokenForUser();
       })
       .catch((err) => console.log(err));
   };
 
   return (
-    <form onSubmit={login}>
+    <form id='login' onSubmit={login}>
       <input
         placeholder="username"
         value={username}
