@@ -14,3 +14,16 @@ form {
 form > * {
   margin: 0.5rem;
 }
+
+ #title {
+  font-size: larger;
+  font-weight: 500;
+}
+
+.singlePost {
+  border: 1px solid black;
+}
+
+.myPost {
+  background-color: cornsilk;
+}

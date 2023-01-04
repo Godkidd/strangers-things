@@ -1,18 +1,36 @@
 import ReactDOM from 'react-dom/client';
 import React, { useState, useEffect } from 'react';
-import { HashRouter, Routes, Route, Link} from 'react-router-dom';
+import { HashRouter, Routes, Route, Link } from 'react-router-dom';
 import Login from './Login';
+import Register from './Register';
+import AllPosts from './AllPosts';
+import Create from './Create';
+
+
 
 
 const App = ()=> {
-  const [registerUsername, setRegisterUsername] = useState('');
-  const [registerPassword, setRegisterPassword] = useState('');
-  const [loginUsername, setLoginUsername] = useState('');
-  const [loginPassword, setLoginPassword] = useState('');
   const [user, setUser] = useState({});
+  const [posts, setPosts] = useState([]);
+  const [token, setToken] = useState(null);
+
+  const fetchPosts= () => {
+    fetch('https://strangers-things.herokuapp.com/api/2209-FTB-ET-WEB-AM/posts', {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+    })
+    .then(response => response.json())
+    .then(result => {
+      setPosts(result.data.posts);
+    })
+    .catch(console.error);
+  };
 
   const exchangeTokenForUser = ()=> {
     const token = window.localStorage.getItem('token');
+    setToken(token);
     if(token){
       fetch('https://strangers-things.herokuapp.com/api/2209-FTB-ET-WEB-AM/users/me', {
         headers: {
@@ -28,34 +46,12 @@ const App = ()=> {
       .catch(err => console.log(err));
     }
   };
+
   useEffect(()=> {
     exchangeTokenForUser();
-  }, []);
+    fetchPosts();
+  }, [token]);
 
-  const register = (ev)=> {
-    ev.preventDefault();
-    fetch('https://strangers-things.herokuapp.com/api/2209-FTB-ET-WEB-AM/users/register', {
-      method: "POST",
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        user: {
-          username: registerUsername,
-          password: registerPassword 
-        }
-      })
-    })
-    .then(response => response.json())
-    .then(result => {
-      if(!result.success){
-        throw result.error;
-      }
-      console.log(result);
-
-    })
-    .catch( err => console.log(err));
-  }
 
   const logout = ()=> {
     window.localStorage.removeItem('token');
@@ -64,32 +60,28 @@ const App = ()=> {
 
   return (
     <div>
-      <h1>Profs Auth App</h1>
-      {
-        user._id ? <div>Welcome { user.username } <button onClick={ logout }>Logout</button></div> : null
-      }
-      {
-        !user._id ? (
-      <div>
-        <form onSubmit = { register }>
-          <input
-            placeholder='username'
-            value={ registerUsername }
-            onChange = { ev => setRegisterUsername(ev.target.value)}
-          />
-          <input 
-            placeholder='password'
-            value={ registerPassword }
-            onChange = { ev => setRegisterPassword(ev.target.value)}
-          />
-          <button>Register</button>
-        </form>
-        <Login exchangeTokenForUser={ exchangeTokenForUser } />
-      </div>) : null
-      } 
-    </div>
+ 
+  <div>
+        <h1>Strangers Things</h1> 
+        {
+          user._id ? 
+            <div>Welcome { user.username } <button onClick={ logout }>Logout</button>
+          </div> : null
+        }
+         { !user._id ? (
+       <div>
+          <Register />
+          <Login exchangeTokenForUser={ exchangeTokenForUser } />
+         
+        </div>) : <Create posts={posts} setPosts={setPosts} /> } 
+        <AllPosts setPosts={setPosts} posts={posts} token={token} fetchPosts={fetchPosts} />
+        
+  </div>
+      </div>
+    );
+  };
 
-  );
-};
+ 
+
 const root = ReactDOM.createRoot(document.querySelector('#root'));
 root.render(<HashRouter><App /></HashRouter>);

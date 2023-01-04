@@ -7,7 +7,6 @@ const Login = (props) => {
 
   const login = (ev) => {
     ev.preventDefault();
-    console.log('login');
     fetch(
       'https://strangers-things.herokuapp.com/api/2209-FTB-ET-WEB-AM/users/login',
       {
@@ -44,6 +43,7 @@ const Login = (props) => {
       />
       <input
         placeholder="password"
+        type="password"
         value={password}
         onChange={(ev) => setPassword(ev.target.value)}
       />
